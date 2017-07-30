@@ -4,7 +4,7 @@ const { toChecksumAddress } = require('ethereumjs-util');
 
 const { hexToBN } = require('./bn');
 
-/*:: type BlockHeadType = {
+/*:: export type BlockHeadType = {
   author: string,
   blockNumber: BN,
   difficulty: BN,

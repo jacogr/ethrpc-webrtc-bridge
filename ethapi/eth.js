@@ -3,6 +3,8 @@
 const { formatNewHeads } = require('./format/block');
 const { hexToBN } = require('./format/bn');
 
+/*:: import type { BlockHeadType } from './format/block' */
+
 class Eth {
   constructor (provider) {
     this._provider = provider;
@@ -14,22 +16,18 @@ class Eth {
     return hexToBN(blockNumber);
   }
 
-  async subscribeBlockNumber (callback/*: (error: Error, blockNumber: BN) => void */)/*: Promise<string> */ {
+  async subscribeBlockNumber (callback/*: (blockNumber: BN) => void */)/*: Promise<string> */ {
     return this._provider.subscribe('newHeads', [], (error, newHeads) => {
-      if (error) {
-        callback(error);
-      } else {
-        callback(null, hexToBN(newHeads.number));
+      if (!error) {
+        callback(hexToBN(newHeads.number));
       }
     });
   }
 
-  async subscribeNewHeads (callback/*: (error: Error, block: any) => void */)/*: Promise<string> */ {
+  async subscribeNewHeads (callback/*: (block: BlockHeadType) => void */)/*: Promise<string> */ {
     return this._provider.subscribe('newHeads', [], (error, newHeads) => {
-      if (error) {
-        callback(error);
-      } else {
-        callback(null, formatNewHeads(newHeads));
+      if (!error) {
+        callback(formatNewHeads(newHeads));
       }
     });
   }

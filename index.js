@@ -72,12 +72,8 @@ function initWorker (type/*: string */) {
   api.eth.blockNumber()
     .then((blockNumber) => console.log('blockNumber', blockNumber))
     .catch((error) => console.error('blockNumber', error));
-  api.eth.subscribeBlockNumber((error, blockNumber) => {
-    if (error) {
-      console.error('blockNumber', error);
-    } else {
-      console.log('blockNumber', blockNumber);
-    }
+  api.eth.subscribeBlockNumber((blockNumber) => {
+    console.log('blockNumber', blockNumber);
   });
 
   l.success('started');
