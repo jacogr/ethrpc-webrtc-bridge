@@ -1,5 +1,7 @@
 // @flow
 
+const l = require('abc2logger')('Api:Eth');
+
 const { formatBlockHeader } = require('./format/block');
 const { hexToBN } = require('./format/bn');
 
@@ -31,6 +33,7 @@ class Eth {
           callback(blockHeader);
           return true;
         } catch (error) {
+          l.error(error);
           return false;
         }
       });
@@ -43,11 +46,11 @@ class Eth {
     return hexToBN(blockNumber);
   }
 
-  subscribeBlockHeader (callback/*: CallbackNewHeads */)/*: Promise<string> */ {
+  subscribeBlockHeader (callback/*: CallbackNewHeads */) {
     this._newHeadsCallbacks.push(callback);
   }
 
-  subscribeBlockNumber (callback/*: (blockNumber: BN) => void */)/*: Promise<string> */ {
+  subscribeBlockNumber (callback/*: (blockNumber: BN) => void */) {
     this._newHeadsCallbacks.push((header) => callback(header.number));
   }
 }
