@@ -1,6 +1,6 @@
 // @flow
 
-/*:: import type { ProviderInterface } from '../provider/types' */
+/*:: import type { ProviderInterface } from 'eth2providers/types' */
 
 class Web3 {
   /*:: _provider: ProviderInterface */

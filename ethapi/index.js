@@ -3,7 +3,7 @@
 const Eth = require('./rpc/eth');
 const Web3 = require('./rpc/web3');
 
-/*:: import type { ProviderInterface } from './provider/types' */
+/*:: import type { ProviderInterface } from 'eth2providers/types' */
 
 class EthApi {
   /*:: _provider: ProviderInterface */

@@ -5,8 +5,8 @@ const l = require('abc2logger')('Api:Eth');
 const { formatBlockHeader } = require('../format/block');
 const { hexToBN } = require('../format/bn');
 
+/*:: import type { ProviderInterface } from 'eth2providers/types' */
 /*:: import type { BlockHeaderType } from '../format/block' */
-/*:: import type { ProviderInterface } from '../provider/types' */
 
 /*:: type CallbackNewHeads = (header: BlockHeaderType) => void */
 

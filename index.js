@@ -2,11 +2,11 @@
 
 const logger = require('abc2logger');
 const cluster = require('cluster');
+const WsProvider = require('eth2providers/ws');
 const os = require('os');
 const yargs = require('yargs');
 
 const EthApi = require('./ethapi');
-const WsProvider = require('./ethapi/provider/ws');
 
 /*:: type ArgvType = {
   color: boolean,
