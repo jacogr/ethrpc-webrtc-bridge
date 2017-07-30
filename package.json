@@ -1,0 +1,37 @@
+{
+  "name": "ethrpc-webrtc-bridge",
+  "version": "0.1.0",
+  "description": "A bridge from Parity Ethereum node to DevP2P over WebRTC",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jacogr/ethrpc-webrtc-bridge.git"
+  },
+  "scripts": {
+    "check": "npm run install && npm run check:jslint && npm run check:jsflow",
+    "check:jslint": "eslint ./index.js",
+    "check:jsflow": "flow check",
+    "start": "npm install && node ./index.js",
+    "test": "NODE_ENV=test jest"
+  },
+  "author": "Jaco Greeff <jacogr@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "abc2logger": "jacogr/abc2logger",
+    "ethereumjs-util": "^5.1.2",
+    "events": "^1.1.1",
+    "websocket": "^1.0.24",
+    "yargs": "^8.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^4.2.0",
+    "eslint-config-semistandard": "^11.0.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.1.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "flow-bin": "^0.50.0",
+    "jest": "^20.0.4"
+  }
+}
