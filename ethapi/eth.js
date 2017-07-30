@@ -1,6 +1,6 @@
 // @flow
 
-const { formatNewHeads } = require('./format/block');
+const { formatBlockHeader } = require('./format/block');
 const { hexToBN } = require('./format/bn');
 
 /*:: import type { BlockHeadType } from './format/block' */
@@ -16,18 +16,18 @@ class Eth {
     return hexToBN(blockNumber);
   }
 
-  async subscribeBlockNumber (callback/*: (blockNumber: BN) => void */)/*: Promise<string> */ {
-    return this._provider.subscribe('newHeads', [], (error, newHeads) => {
+  async subscribeBlockHeader (callback/*: (header: BlockHeaderType) => void */)/*: Promise<string> */ {
+    return this._provider.subscribe('newHeads', [], (error, header) => {
       if (!error) {
-        callback(hexToBN(newHeads.number));
+        callback(formatBlockHeader(header));
       }
     });
   }
 
-  async subscribeNewHeads (callback/*: (block: BlockHeadType) => void */)/*: Promise<string> */ {
-    return this._provider.subscribe('newHeads', [], (error, newHeads) => {
+  async subscribeBlockNumber (callback/*: (blockNumber: BN) => void */)/*: Promise<string> */ {
+    return this._provider.subscribe('newHeads', [], (error, header) => {
       if (!error) {
-        callback(formatNewHeads(newHeads));
+        callback(hexToBN(header.number));
       }
     });
   }

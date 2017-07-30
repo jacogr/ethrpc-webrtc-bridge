@@ -4,7 +4,7 @@ const { toChecksumAddress } = require('ethereumjs-util');
 
 const { hexToBN } = require('./bn');
 
-/*:: export type BlockHeadType = {
+/*:: export type BlockHeaderType = {
   author: string,
   blockNumber: BN,
   difficulty: BN,
@@ -15,14 +15,14 @@ const { hexToBN } = require('./bn');
   timestamp: Date
 } */
 
-function formatNewHeads (newHeads/*: { [string]: string } */)/*: BlockHeadType */ {
+function formatBlockHeader (header/*: { [string]: string } */)/*: BlockHeaderType */ {
   return Object
-    .keys(newHeads)
+    .keys(header)
     .reduce((result, key) => {
       switch (key) {
         case 'author':
         case 'miner':
-          result[key] = toChecksumAddress(newHeads[key]);
+          result[key] = toChecksumAddress(header[key]);
           break;
 
         case 'difficulty':
@@ -30,15 +30,15 @@ function formatNewHeads (newHeads/*: { [string]: string } */)/*: BlockHeadType *
         case 'gasUsed':
         case 'number':
         case 'size':
-          result[key] = hexToBN(newHeads[key]);
+          result[key] = hexToBN(header[key]);
           break;
 
         case 'timestamp':
-          result[key] = new Date(hexToBN(newHeads[key]).toNumber() * 1000);
+          result[key] = new Date(hexToBN(header[key]).toNumber() * 1000);
           break;
 
         default:
-          result[key] = newHeads[key];
+          result[key] = header[key];
           break;
       }
 
@@ -47,5 +47,5 @@ function formatNewHeads (newHeads/*: { [string]: string } */)/*: BlockHeadType *
 }
 
 module.exports = {
-  formatNewHeads
+  formatBlockHeader
 };
