@@ -69,9 +69,7 @@ function initWorker (type/*: string */) {
   api.web3.clientVersion()
     .then((version) => console.log('version', version))
     .catch((error) => console.error('version', error));
-  api.eth.blockNumber()
-    .then((blockNumber) => console.log('blockNumber', blockNumber))
-    .catch((error) => console.error('blockNumber', error));
+
   api.eth.subscribeBlockNumber((blockNumber) => {
     console.log('blockNumber', blockNumber);
   });

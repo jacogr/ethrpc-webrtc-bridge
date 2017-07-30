@@ -3,11 +3,38 @@
 const { formatBlockHeader } = require('./format/block');
 const { hexToBN } = require('./format/bn');
 
-/*:: import type { BlockHeadType } from './format/block' */
+/*:: import type { BlockHeaderType } from './format/block' */
+
+/*:: type CallbackNewHeads = (header: BlockHeaderType) => void */
 
 class Eth {
+  /*:: _newHeadsCallbacks: Array<CallbackNewHeads> */
+
   constructor (provider) {
     this._provider = provider;
+
+    this._newHeadsCallbacks = [];
+
+    this._subscribeNewHeads();
+  }
+
+  _subscribeNewHeads () {
+    this._provider.subscribe('newHeads', [], (error, header) => {
+      if (error) {
+        return;
+      }
+
+      const blockHeader/*: BlockHeaderType */ = formatBlockHeader(header);
+
+      this._newHeadsCallbacks = this._newHeadsCallbacks.filter((callback) => {
+        try {
+          callback(blockHeader);
+          return true;
+        } catch (error) {
+          return false;
+        }
+      });
+    });
   }
 
   async blockNumber ()/*: Promise<BN> */ {
@@ -16,20 +43,12 @@ class Eth {
     return hexToBN(blockNumber);
   }
 
-  async subscribeBlockHeader (callback/*: (header: BlockHeaderType) => void */)/*: Promise<string> */ {
-    return this._provider.subscribe('newHeads', [], (error, header) => {
-      if (!error) {
-        callback(formatBlockHeader(header));
-      }
-    });
+  subscribeBlockHeader (callback/*: CallbackNewHeads */)/*: Promise<string> */ {
+    this._newHeadsCallbacks.push(callback);
   }
 
-  async subscribeBlockNumber (callback/*: (blockNumber: BN) => void */)/*: Promise<string> */ {
-    return this._provider.subscribe('newHeads', [], (error, header) => {
-      if (!error) {
-        callback(hexToBN(header.number));
-      }
-    });
+  subscribeBlockNumber (callback/*: (blockNumber: BN) => void */)/*: Promise<string> */ {
+    this._newHeadsCallbacks.push((header) => callback(header.number));
   }
 }
 
