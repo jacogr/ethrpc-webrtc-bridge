@@ -80,7 +80,7 @@ class WsProvider extends JsonRpc /*:: implements ProviderInterface */ {
     l.error(error);
   }
 
-  _onMessageAsync (id, error, result) {
+  _onMessageAsync (id/*: number */, error/*: Error */, result) {
     if (!this._handlers[id]) {
       this.emit('error', new Error(`Unable to find handler for message '${id}'`));
       return;
@@ -101,7 +101,7 @@ class WsProvider extends JsonRpc /*:: implements ProviderInterface */ {
     delete this._handlers[id];
   }
 
-  _onMessageSubscription (id, _error, result) {
+  _onMessageSubscription (id/*: string */, _error/*: Error */, result) {
     if (!this._subscriptions[id]) {
       this.emit('error', new Error(`Unable to find subscription for '${id}'`));
       return;

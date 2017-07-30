@@ -3,7 +3,7 @@
 const { BN } = require('ethereumjs-util');
 
 function hexToBN (_hex/*: string */)/*: BN */ {
-  const hex = _hex.substr(0, 2) === '0x'
+  const hex/*: string */ = _hex.substr(0, 2) === '0x'
     ? _hex.substr(2)
     : _hex;
 
