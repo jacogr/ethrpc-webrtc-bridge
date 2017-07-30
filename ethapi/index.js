@@ -1,11 +1,9 @@
 // @flow
 
-const Eth = require('./eth');
-const Web3 = require('./web3');
+const Eth = require('./rpc/eth');
+const Web3 = require('./rpc/web3');
 
-/*:: type ProviderInterface = {
-  send: (method: string, params: Array<string>, callback: SendCallback) => void
-} */
+/*:: import type { ProviderInterface } from './provider/types' */
 
 class EthApi {
   /*:: _provider: ProviderInterface */
@@ -15,10 +13,8 @@ class EthApi {
   constructor (provider/*: ProviderInterface */) {
     this._provider = provider;
 
-    this._subscriptions = {};
-
-    this.eth = new Eth(provider, this);
-    this.web3 = new Web3(provider, this);
+    this.eth = new Eth(provider);
+    this.web3 = new Web3(provider);
   }
 }
 

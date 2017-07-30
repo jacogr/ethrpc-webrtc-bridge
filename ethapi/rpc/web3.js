@@ -1,6 +1,10 @@
 // @flow
 
+/*:: import type { ProviderInterface } from '../provider/types' */
+
 class Web3 {
+  /*:: _provider: ProviderInterface */
+
   constructor (provider/*: ProviderInterface */) {
     this._provider = provider;
   }

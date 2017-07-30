@@ -5,25 +5,25 @@ const WebSocketClient = require('websocket').client;
 
 const JsonRpc = require('./jsonrpc');
 
+/*:: import type { ProviderInterface, ProviderResultCallback } from './types' */
+
 /*:: type WsRpcOptions = {
   host: string,
   port: number
 } */
 
-/*:: type WsResultCallback = (error: ?Error, result?: string) => void */
-
 /*:: type WsHandlerType = {
-  reject: (error: Error) => void,
-  resolve: (result: string) => void
+  callback: ProviderResultCallback,
+  id: number
 } */
 
 /*:: type WsSubscriptionType = {
-  callbacks: Array<WsResultCallback>,
+  callbacks: Array<ProviderResultCallback>,
   method: string,
   result: ?string
 } */
 
-class WsProvider extends JsonRpc {
+class WsProvider extends JsonRpc /*:: implements ProviderInterface */ {
   /*:: _connection: ?WebSocketConnection = null */
   /*:: _handlers: { [number]: WsHandlerType } = {} */
   /*:: _queued: Array<string> = [] */
@@ -149,7 +149,7 @@ class WsProvider extends JsonRpc {
     }
   }
 
-  send (method/*: string */, params/*: Array<string> */, callback/*: WsResultCallback */)/*: number */ {
+  send (method/*: string */, params/*: Array<string> */, callback/*: ProviderResultCallback */)/*: number */ {
     const { id, json } = this._encode(method, params);
 
     this._handlers[id] = {
@@ -178,7 +178,7 @@ class WsProvider extends JsonRpc {
     });
   }
 
-  async subscribe (method/*: string */, params/*: Array<string> */, callback/*: WsResultCallback */)/*: Promise<string> */ {
+  async subscribe (method/*: string */, params/*: Array<string> */, callback/*: ProviderResultCallback */)/*: Promise<string> */ {
     const subscription/*: ?WsSubscriptionType */ = Object
       .values(this._subscriptions)
       .find((subscription) => subscription.method === method);
@@ -206,7 +206,6 @@ class WsProvider extends JsonRpc {
   }
 
   unsubscribe (method/*: string */, params/*: Array<string> */)/*: Promise<string> */ {
-
   }
 }
 
