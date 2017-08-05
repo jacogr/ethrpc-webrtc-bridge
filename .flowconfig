@@ -3,6 +3,7 @@
 [include]
 
 [libs]
+node_modules/eth2providers/flow-typed
 
 [options]
 unsafe.enable_getters_and_setters=true

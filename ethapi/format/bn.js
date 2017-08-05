@@ -2,7 +2,7 @@
 
 const { BN } = require('ethereumjs-util');
 
-function hexToBN (_hex/*: string */)/*: BN */ {
+function hexToBn (_hex/*: string */)/*: BN */ {
   const hex/*: string */ = _hex.substr(0, 2) === '0x'
     ? _hex.substr(2)
     : _hex;
@@ -10,6 +10,14 @@ function hexToBN (_hex/*: string */)/*: BN */ {
   return new BN(hex, 16);
 }
 
+function bnToHex (bn/*: BN */)/*: string */ {
+  const value/*: string */ = bn.toString(16);
+  const isShort/*: boolean */ = value.length % 2 === 1;
+
+  return `0x${isShort ? '0' : ''}${value}`;
+}
+
 module.exports = {
-  hexToBN
+  bnToHex,
+  hexToBn
 };

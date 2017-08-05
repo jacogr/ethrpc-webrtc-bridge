@@ -8,16 +8,16 @@
     "url": "git://github.com/jacogr/ethrpc-webrtc-bridge.git"
   },
   "scripts": {
-    "check": "npm run install && npm run check:jslint && npm run check:jsflow",
-    "check:jslint": "eslint ./index.js",
-    "check:jsflow": "flow check",
-    "start": "npm install && node ./index.js",
-    "test": "NODE_ENV=test jest"
+    "start": "node ./index.js",
+    "test": "npm run test:lint && npm run test:flow",
+    "test:lint": "eslint ./index.js",
+    "test:flow": "flow check",
+    "test:jest": "NODE_ENV=test jest"
   },
   "author": "Jaco Greeff <jacogr@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "abc2logger": "jacogr/abc2logger",
+    "eth2logger": "jacogr/eth2logger",
     "eth2providers": "jacogr/eth2providers",
     "ethereumjs-util": "^5.1.2",
     "events": "^1.1.1",

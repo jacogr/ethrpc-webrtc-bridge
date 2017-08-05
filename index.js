@@ -1,6 +1,6 @@
 // @flow
 
-const logger = require('abc2logger');
+const logger = require('eth2logger');
 const cluster = require('cluster');
 const WsProvider = require('eth2providers/ws');
 const os = require('os');
@@ -41,13 +41,13 @@ function initMaster () {
       cluster.fork();
     }
 
-    cluster.on('exit', (worker, code, signal) => {
+    cluster.on('exit', (worker/*: ClusterWorker */, code/*: number */, signal/*: string */) => {
       l.log('process died', worker.process.pid);
 
       cluster.fork();
     });
 
-    l.success('started');
+    l.ok('started');
   } else {
     initWorker('Process');
   }
@@ -70,11 +70,9 @@ function initWorker (type/*: string */) {
     .then((version) => console.log('version', version))
     .catch((error) => console.error('version', error));
 
-  api.eth.subscribeBlockNumber((blockNumber) => {
-    console.log('blockNumber', blockNumber);
-  });
+  api.eth.subscribeBlock(console.log);
 
-  l.success('started');
+  l.ok('started');
 }
 
 if (cluster.isMaster) {

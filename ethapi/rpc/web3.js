@@ -1,19 +1,24 @@
 // @flow
 
+const { attachCall } = require('./call');
+
 /*:: import type { ProviderInterface } from 'eth2providers/types' */
 
-class Web3 {
-  /*:: _provider: ProviderInterface */
+/*:: export type Web3RpcType = {
+  clientVersion: () => Promise<string>
+} */
 
-  constructor (provider/*: ProviderInterface */) {
-    this._provider = provider;
-  }
-
-  async clientVersion ()/*: Promise<string> */ {
-    const clientId/*: string */ = await this._provider.sendPromise('web3_clientVersion', []);
-
-    return clientId.split('/').filter((part) => part).join('/');
-  }
+function clientVersionOutput (version/*: string */)/*: string */ {
+  return version.split('/').filter((part) => part).join('/');
 }
 
-module.exports = Web3;
+function init (provider/*: ProviderInterface */)/*: Web3RpcType */ {
+  return {
+    clientVersion: attachCall(provider, {
+      method: 'web3_clientVersion',
+      output: clientVersionOutput
+    })
+  };
+}
+
+module.exports = init;

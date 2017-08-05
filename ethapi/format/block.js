@@ -1,24 +1,54 @@
 // @flow
 
-const { toChecksumAddress } = require('ethereumjs-util');
+const { BN, toChecksumAddress } = require('ethereumjs-util');
 
-const { hexToBN } = require('./bn');
+const { bnToHex, hexToBn } = require('./bn');
+const { transactionOutput } = require('./transaction');
+
+/*:: import type { TransactionType } from './transaction' */
 
 /*:: export type BlockHeaderType = {
   author: string,
-  blockNumber: BN,
   difficulty: BN,
   gasLimit: BN,
   gasUsed: BN,
   miner: string,
+  number: BN,
   size: BN,
   timestamp: Date
 } */
 
-function formatBlockHeader (header/*: { [string]: string } */)/*: BlockHeaderType */ {
+/*:: export type BlockType = BlockHeaderType & {
+  totalDifficulty: BN,
+  transactions: Array<TransactionType>
+} */
+
+function blockOutput (block/*: any */)/*: BlockType */ {
+  return Object
+    .keys(block)
+    .reduce((result/*: BlockType */, key/*: string */) => {
+      switch (key) {
+        case 'totalDifficulty':
+          result[key] = hexToBn(block[key]);
+          break;
+
+        case 'transactions':
+          result[key] = ((block[key]/*: any */)/*: Array<any> */).map(transactionOutput);
+          break;
+
+        default:
+          result[key] = result[key] || block[key];
+          break;
+      }
+
+      return result;
+    }, (blockHeaderOutput(block)/*: $Shape<BlockType> */));
+}
+
+function blockHeaderOutput (header/*: any */)/*: BlockHeaderType */ {
   return Object
     .keys(header)
-    .reduce((result, key) => {
+    .reduce((result/*: BlockHeaderType */, key/*: string */) => {
       switch (key) {
         case 'author':
         case 'miner':
@@ -30,22 +60,36 @@ function formatBlockHeader (header/*: { [string]: string } */)/*: BlockHeaderTyp
         case 'gasUsed':
         case 'number':
         case 'size':
-          result[key] = hexToBN(header[key]);
+          result[key] = hexToBn(header[key]);
           break;
 
         case 'timestamp':
-          result[key] = new Date(hexToBN(header[key]).toNumber() * 1000);
+          result[key] = new Date(hexToBn(header[key]).toNumber() * 1000);
           break;
 
         default:
-          result[key] = header[key];
+          result[key] = result[key] || header[key];
           break;
       }
 
       return result;
-    }, {});
+    }, ({}/*: $Shape<BlockHeaderType> */));
+}
+
+function blockNumberInput (blockNumber/*: string | number | BN */)/*: string */ {
+  if (['earliest', 'latest', 'pending'].includes(blockNumber)) {
+    return ((blockNumber/*: any */)/*: string */);
+  }
+
+  if (BN.isBN(blockNumber)) {
+    return bnToHex(((blockNumber/*: any */)/*: BN */));
+  }
+
+  return bnToHex(new BN(blockNumber));
 }
 
 module.exports = {
-  formatBlockHeader
+  blockOutput,
+  blockHeaderOutput,
+  blockNumberInput
 };
